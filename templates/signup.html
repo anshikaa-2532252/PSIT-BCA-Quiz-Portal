@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-2xl shadow-xl overflow-hidden fade-in-up mt-4">
+    <div class="gradient-brand text-white text-center py-6">
+        <h2 class="text-2xl font-bold">Create Your Account</h2>
+        <p class="text-yellow-100 text-sm">Join the PSIT BCA Quiz Portal</p>
+    </div>
+    <div class="p-8">
+        <form method="POST" class="space-y-4">
+            <div>
+                <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+                <input type="text" id="username" name="username" required
+                       class="shadow-sm appearance-none border rounded-lg w-full py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#a3243a]">
+            </div>
+            <div>
+                <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                <input type="password" id="password" name="password" required
+                       class="shadow-sm appearance-none border rounded-lg w-full py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#a3243a]">
+            </div>
+            <div>
+                <label for="user_type" class="block text-gray-700 text-sm font-bold mb-2">I am a</label>
+                <select id="user_type" name="user_type" required
+                        class="shadow-sm appearance-none border rounded-lg w-full py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#a3243a]">
+                    <option value="student">Student (BCA 2nd Year)</option>
+                    <option value="teacher">Teacher / Faculty</option>
+                </select>
+            </div>
+            <button type="submit"
+                    class="w-full gradient-brand text-white font-bold py-3 rounded-lg hover:opacity-90 transition shadow">
+                Sign Up
+            </button>
+        </form>
+        <p class="text-center text-sm text-gray-500 mt-4">
+            Already registered? <a href="{{ url_for('login') }}" class="text-[#a3243a] font-semibold hover:underline">Login instead</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

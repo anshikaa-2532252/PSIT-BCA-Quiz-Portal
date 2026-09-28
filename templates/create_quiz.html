@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-3xl mx-auto fade-in-up">
+    <h1 class="text-3xl font-bold mb-6">Create New Quiz</h1>
+    <form method="POST" id="quiz-form" class="bg-white shadow rounded-2xl px-8 pt-6 pb-8 mb-4">
+        <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="title">Quiz Title</label>
+                <input class="shadow-sm appearance-none border rounded-lg w-full py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#a3243a]"
+                       type="text" name="title" id="title" required placeholder="e.g. Python Programming - Advanced">
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="timer">Timer (minutes)</label>
+                <input class="shadow-sm appearance-none border rounded-lg w-full py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#a3243a]"
+                       type="number" name="timer" id="timer" required min="1" value="10">
+            </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4 mb-6">
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="subject">Subject (CSJMU BCA 2nd Year)</label>
+                <select name="subject" id="subject" required
+                        class="shadow-sm appearance-none border rounded-lg w-full py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#a3243a]">
+                    <option>Python Programming</option>
+                    <option>Operating System</option>
+                    <option>Introduction to Emerging Technologies</option>
+                    <option>Internet & Web Technology</option>
+                    <option>Software Engineering</option>
+                    <option>Database Management System</option>
+                    <option>Computer Networks</option>
+                    <option>Computer Graphics & Computer Vision</option>
+                    <option>Numerical & Statistical Techniques</option>
+                    <option>Soft Computing</option>
+                    <option>General</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="level">Difficulty Level</label>
+                <select name="level" id="level" required
+                        class="shadow-sm appearance-none border rounded-lg w-full py-2.5 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#a3243a]">
+                    <option value="Basic">Basic</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="questions-container"></div>
+
+        <input type="hidden" name="question_count" id="question_count" value="0">
+
+        <button type="button" onclick="addQuestion()"
+                class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg mb-4 mr-3">
+            + Add Question
+        </button>
+
+        <button type="submit"
+                class="gradient-brand text-white font-bold py-2.5 px-6 rounded-lg shadow hover:opacity-90">
+            Create Quiz
+        </button>
+    </form>
+</div>
+
+<script>
+let questionCount = 0;
+
+function addQuestion() {
+    const questionsContainer = document.getElementById('questions-container');
+    const questionDiv = document.createElement('div');
+    questionDiv.className = 'mb-6 p-5 border rounded-xl bg-gray-50 relative';
+    questionDiv.innerHTML = `
+        <h3 class="font-bold mb-3 text-[#7c1c2c]">Question ${questionCount + 1}</h3>
+        <div class="mb-3">
+            <label class="block text-gray-700 text-sm font-bold mb-1">Question Text</label>
+            <input type="text" name="question_text_${questionCount}" required
+                   class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700">
+        </div>
+        <div class="grid md:grid-cols-2 gap-3 mb-3">
+            <div>
+                <label class="block text-gray-700 text-xs font-bold mb-1">Option A</label>
+                <input type="text" name="option_a_${questionCount}" required
+                       class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700">
+            </div>
+            <div>
+                <label class="block text-gray-700 text-xs font-bold mb-1">Option B</label>
+                <input type="text" name="option_b_${questionCount}" required
+                       class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700">
+            </div>
+            <div>
+                <label class="block text-gray-700 text-xs font-bold mb-1">Option C</label>
+                <input type="text" name="option_c_${questionCount}" required
+                       class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700">
+            </div>
+            <div>
+                <label class="block text-gray-700 text-xs font-bold mb-1">Option D</label>
+                <input type="text" name="option_d_${questionCount}" required
+                       class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700">
+            </div>
+        </div>
+        <div>
+            <label class="block text-gray-700 text-sm font-bold mb-1">Correct Answer</label>
+            <select name="correct_answer_${questionCount}" required
+                    class="shadow-sm appearance-none border rounded-lg w-full py-2 px-3 text-gray-700">
+                <option value="option_a">Option A</option>
+                <option value="option_b">Option B</option>
+                <option value="option_c">Option C</option>
+                <option value="option_d">Option D</option>
+            </select>
+        </div>
+    `;
+    questionsContainer.appendChild(questionDiv);
+    questionCount++;
+    document.getElementById('question_count').value = questionCount;
+}
+addQuestion();
+</script>
+{% endblock %}

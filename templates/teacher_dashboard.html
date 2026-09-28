@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="fade-in-up">
+    <div class="gradient-brand rounded-2xl text-white px-6 py-8 mb-8 shadow-lg flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl md:text-3xl font-extrabold">Faculty Dashboard</h1>
+            <p class="text-yellow-100 text-sm mt-1">PSIT College of Higher Education, Kanpur &middot; BCA Department</p>
+        </div>
+        <a href="{{ url_for('create_quiz') }}" class="bg-white text-[#7c1c2c] font-bold py-2.5 px-6 rounded-full shadow hover:scale-105 transition inline-block text-center">
+            + Create New Quiz
+        </a>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mb-8">
+        <div class="bg-white rounded-xl shadow p-5 text-center card-pop">
+            <p class="text-2xl font-extrabold text-gradient">{{ quizzes|length }}</p>
+            <p class="text-xs md:text-sm text-gray-600 mt-1">Quizzes Created</p>
+        </div>
+        <div class="bg-white rounded-xl shadow p-5 text-center card-pop">
+            <p class="text-2xl font-extrabold text-gradient">{{ total_attempts }}</p>
+            <p class="text-xs md:text-sm text-gray-600 mt-1">Total Student Attempts</p>
+        </div>
+    </div>
+
+    <h2 class="text-2xl font-bold mb-4">Your Quizzes</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {% for quiz in quizzes %}
+        <div class="bg-white shadow rounded-2xl p-6 card-pop border-t-4 {{ 'border-[#7c1c2c]' if quiz.level == 'Advanced' else 'border-yellow-500' }}">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ quiz.subject }}</span>
+                <span class="text-xs font-bold px-2 py-0.5 rounded-full {{ 'bg-red-100 text-red-700' if quiz.level == 'Advanced' else 'bg-yellow-100 text-yellow-700' }}">
+                    {{ quiz.level }}
+                </span>
+            </div>
+            <h3 class="text-lg font-bold mb-2">{{ quiz.title }}</h3>
+            <p class="text-gray-500 text-sm mb-4">📝 {{ quiz.questions|length }} Questions &nbsp;|&nbsp; ⏱️ {{ quiz.timer }} min</p>
+            <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold">
+                <a href="{{ url_for('take_quiz', quiz_id=quiz.id) }}" class="text-gray-600 hover:text-[#7c1c2c]">Preview</a>
+                <a href="{{ url_for('share_quiz', quiz_id=quiz.id) }}" class="text-gray-600 hover:text-[#7c1c2c]">Share Code</a>
+                <a href="{{ url_for('quiz_results', quiz_id=quiz.id) }}" class="text-green-600 hover:text-green-800">Leaderboard</a>
+                <form method="POST" action="{{ url_for('delete_quiz', quiz_id=quiz.id) }}" class="inline"
+                      onsubmit="return confirm('Delete this quiz? This cannot be undone.');">
+                    <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-gray-500 col-span-3 text-center py-10">You haven't created any quizzes yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

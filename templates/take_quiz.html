@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="fade-in-up max-w-5xl mx-auto grid md:grid-cols-4 gap-6">
+
+    <div class="md:col-span-3 order-2 md:order-1">
+        <div class="bg-white rounded-2xl shadow p-6 mb-4">
+            <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">{{ quiz.subject }}</span>
+                <span class="text-xs font-bold px-2 py-0.5 rounded-full {{ 'bg-red-100 text-red-700' if quiz.level == 'Advanced' else 'bg-yellow-100 text-yellow-700' }}">
+                    {{ quiz.level }}
+                </span>
+            </div>
+            <h1 class="text-2xl font-extrabold">{{ quiz.title }}</h1>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-4">
+                <div id="progress-bar" class="gradient-brand h-2.5 rounded-full transition-all" style="width:0%"></div>
+            </div>
+            <p class="text-xs text-gray-500 mt-1"><span id="answered-count">0</span> of {{ quiz.questions|length }} answered</p>
+        </div>
+
+        <form id="quiz-form" method="POST">
+            {% for question in quiz.questions %}
+            <div class="bg-white rounded-2xl shadow p-6 mb-4 question-block" id="q-block-{{ loop.index }}" data-qnum="{{ loop.index }}">
+                <p class="font-bold text-gray-800 mb-4">
+                    <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#7c1c2c] text-white text-sm mr-2">{{ loop.index }}</span>
+                    {{ question.question_text }}
+                </p>
+                {% set qnum = loop.index %}
+                <div class="space-y-2">
+                    {% for opt in ['a','b','c','d'] %}
+                    <label class="flex items-center gap-3 border rounded-lg px-4 py-2.5 cursor-pointer hover:bg-yellow-50 transition option-label">
+                        <input type="radio" name="question_{{ question.id }}" value="option_{{ opt }}" required
+                               class="accent-[#7c1c2c] w-4 h-4" onchange="markAnswered({{ qnum }})">
+                        <span>{{ question['option_' + opt] }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            <div class="text-right">
+                <button type="submit" id="submit-btn"
+                        class="gradient-brand text-white font-bold py-3 px-8 rounded-full shadow-lg hover:opacity-90 transition">
+                    Submit Quiz
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="order-1 md:order-2">
+        <div class="sticky top-24 space-y-4">
+            <div class="bg-white rounded-2xl shadow p-5 text-center">
+                <p class="text-xs uppercase tracking-wide text-gray-500 font-semibold mb-1">Time Remaining</p>
+                <p id="timer" class="text-3xl font-extrabold text-[#7c1c2c]">{{ quiz.timer }}:00</p>
+            </div>
+            <div class="bg-white rounded-2xl shadow p-5">
+                <p class="text-xs uppercase tracking-wide text-gray-500 font-semibold mb-3">Question Navigator</p>
+                <div class="grid grid-cols-5 gap-2" id="nav-grid">
+                    {% for question in quiz.questions %}
+                    <a href="#q-block-{{ loop.index }}" id="nav-{{ loop.index }}"
+                       class="nav-btn flex items-center justify-center w-9 h-9 rounded-lg border text-sm font-semibold text-gray-600 hover:border-[#7c1c2c] transition">
+                        {{ loop.index }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let timeLeft = {{ quiz.timer * 60 }};
+const timerEl = document.getElementById('timer');
+const totalQuestions = {{ quiz.questions|length }};
+const answered = new Set();
+
+function updateTimer() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    timerEl.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+    if (timeLeft <= 60) {
+        timerEl.classList.remove('text-[#7c1c2c]');
+        timerEl.classList.add('text-red-600', 'animate-pulse');
+    }
+
+    if (timeLeft <= 0) {
+        document.getElementById('quiz-form').submit();
+    } else {
+        timeLeft--;
+    }
+}
+updateTimer();
+const timerInterval = setInterval(updateTimer, 1000);
+
+function markAnswered(qnum) {
+    answered.add(qnum);
+    document.getElementById('answered-count').textContent = answered.size;
+    document.getElementById('progress-bar').style.width = (answered.size / totalQuestions * 100) + '%';
+    const navBtn = document.getElementById('nav-' + qnum);
+    navBtn.classList.add('bg-[#7c1c2c]', 'text-white', 'border-[#7c1c2c]');
+    navBtn.classList.remove('text-gray-600');
+}
+
+document.getElementById('quiz-form').addEventListener('submit', function(e) {
+    if (answered.size < totalQuestions) {
+        if (!confirm(`You've answered ${answered.size} of ${totalQuestions} questions. Submit anyway?`)) {
+            e.preventDefault();
+        }
+    }
+});
+</script>
+{% endblock %}

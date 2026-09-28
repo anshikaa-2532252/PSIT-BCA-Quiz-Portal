@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PSIT BCA Quiz Portal{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .gradient-brand { background: linear-gradient(135deg, #7c1c2c 0%, #a3243a 45%, #d4a017 100%); }
+        .text-gradient { background: linear-gradient(135deg, #7c1c2c, #d4a017); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .card-pop { transition: transform .2s ease, box-shadow .2s ease; }
+        .card-pop:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,.12); }
+        @keyframes fadeInUp { from { opacity:0; transform: translateY(12px);} to {opacity:1; transform:translateY(0);} }
+        .fade-in-up { animation: fadeInUp .5s ease both; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <nav class="gradient-brand text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="{{ url_for('index') }}" class="flex items-center gap-3">
+                <span class="bg-white text-[#7c1c2c] rounded-full w-10 h-10 flex items-center justify-center font-extrabold text-lg shadow">P</span>
+                <span class="leading-tight">
+                    <span class="block font-extrabold text-lg tracking-wide">PSIT College of Higher Education</span>
+                    <span class="block text-xs text-yellow-100">BCA 2nd Year &mdash; Interactive Quiz Portal</span>
+                </span>
+            </a>
+            <div class="flex items-center gap-4 text-sm font-semibold">
+                {% if 'user_id' in session %}
+                    <a href="{{ url_for('dashboard') }}" class="hover:text-yellow-200 transition">Dashboard</a>
+                    <a href="{{ url_for('logout') }}" class="bg-white/15 hover:bg-white/25 px-3 py-1.5 rounded-full transition">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="hover:text-yellow-200 transition">Login</a>
+                    <a href="{{ url_for('signup') }}" class="bg-white text-[#7c1c2c] hover:bg-yellow-100 px-3 py-1.5 rounded-full transition">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-6 px-4 flex-1 w-full">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded-lg mb-4 fade-in-up shadow-sm" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="mt-12 py-6 text-center text-sm text-gray-500 border-t bg-white">
+        <p>&copy; {{ 2026 }} PSIT College of Higher Education, Kanpur &mdash; Department of BCA</p>
+        <p class="text-xs mt-1">Affiliated to Chhatrapati Shahu Ji Maharaj University (CSJMU), Kanpur</p>
+    </footer>
+</body>
+</html>

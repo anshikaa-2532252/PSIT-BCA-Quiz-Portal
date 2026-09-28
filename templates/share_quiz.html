@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-2xl shadow-xl overflow-hidden fade-in-up mt-4">
+    <div class="gradient-brand text-white text-center py-6">
+        <h2 class="text-2xl font-bold">Share Quiz</h2>
+        <p class="text-yellow-100 text-sm">{{ quiz.title }}</p>
+    </div>
+    <div class="p-8 text-center">
+        <p class="mb-4 text-gray-600">Share this code with your BCA 2nd Year students:</p>
+        <div class="bg-gray-100 p-5 rounded-xl mb-4 flex items-center justify-center gap-3">
+            <code id="share-code" class="text-2xl font-bold tracking-widest font-mono text-[#7c1c2c]">{{ quiz.share_code }}</code>
+        </div>
+        <button onclick="copyCode()" id="copy-btn"
+                class="mb-4 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-5 rounded-full transition">
+            📋 Copy Code
+        </button>
+        <p class="text-sm text-gray-500">Students can enter this code under <strong>Join with Code</strong> on their dashboard.</p>
+        <a href="{{ url_for('dashboard') }}" class="mt-6 inline-block gradient-brand text-white font-bold py-2.5 px-6 rounded-full shadow hover:opacity-90 transition">
+            Back to Dashboard
+        </a>
+    </div>
+</div>
+<script>
+function copyCode() {
+    const code = document.getElementById('share-code').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('copy-btn');
+        const original = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => { btn.textContent = original; }, 1500);
+    });
+}
+</script>
+{% endblock %}
