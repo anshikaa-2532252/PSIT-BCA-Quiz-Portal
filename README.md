@@ -29,4 +29,18 @@ A web-based quiz management platform developed using Python Flask, HTML, CSS, an
 
 ```bash
 git clone https://github.com/anshikaa-2532252/PSIT-BCA-Quiz-Portal.git
-cd PSIT-BCA-Quiz-Portal
+cd PSIT-BCA-Quiz-Portal  
+  
+## Screenshots
+
+### Home Page
+![Home Page](Screenshots/Home.png)
+
+### Login Page
+![Login Page](Screenshots/Login.png)
+
+### Student Dashboard
+![Student Dashboard](Screenshots/Student-dashboard.png)
+
+### Teacher Dashboard
+![Teacher Dashboard](Screenshots/teacher-dashboard.png)
